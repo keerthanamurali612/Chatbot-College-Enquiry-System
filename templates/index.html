@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College ChatBot</title>
+    <link rel="stylesheet" href="/static/chat.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js" integrity="sha512-CryKbMe7sjSCDPl18jtJI5DR5jtkUWxPXWaLCst6QjH8wxDexfRJic2WRmRXmstr2Y8SxDDWuBO6CQC6IE4KTA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+    <style>html,body{overflow-y: hidden;}</style>
+</head>
+<body>
+
+    <main class="container">
+    <section class="msger">
+        <header class="msger-header">
+            <div class="msger-header-title">
+            <i class="fas fa-comment-alt"></i>AAMEC Chat
+            </div>
+            <div class="msger-header-options">
+            <span></span>
+            </div>
+        </header>
+
+        <main class="msger-chat" >
+            <div id="chatbox">
+                <div class="msg left-msg">
+                    <div class="msg-img" style="display:flex;justify-content:center;align-items:center;font-size:22px;color:white">Bot</div>
+                    <div class="msg-bubble">
+                        <div class="msg-text">
+                            Hi! I'm CollegeBot.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p id="get"></p>
+        </main>
+        <div class="msger-inputarea" id="userInput">
+            <input type="text" name="msg" class="msger-input" id="textInput" placeholder="Enter your message...">
+            <button type="submit" id="buttonInput" class="msger-send-btn">Send</button>
+        </div>
+    </section>
+    </main>
+
+    <script>
+        function getBotResponse() {
+            var rawText = $("#textInput").val();
+            var userHtml = '<div class="msg right-msg"><div class="msg-img" style="display:flex;justify-content:center;align-items:center;font-size:22px;color:white">You</div><div class="msg-bubble"><div class="msg-text">'+rawText+'</div></div></div>';
+            $("#textInput").val("");
+            $("#chatbox").append(userHtml);
+            document.getElementById('get').scrollIntoView({block: 'start', behavior: 'smooth'});
+            $.get("/get", { msg: rawText }).done(function(data) {
+                var botHtml = '<div class="msg left-msg"><div class="msg-img" style="display:flex;justify-content:center;align-items:center;font-size:22px;color:white">Bot</div><div class="msg-bubble"><div class="msg-text">'+data+'</div></div></div>';
+                $("#chatbox").append(botHtml);
+                document.getElementById('get').scrollIntoView({block: 'start', behavior: 'smooth'});
+            });
+        }
+        $("#textInput").keypress(function(e) {
+            if(e.which == 13) {
+                getBotResponse();
+            }
+        });
+        $("#buttonInput").click(function() {
+            getBotResponse();
+        })
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
+</body>
+</html>
